@@ -1,7 +1,7 @@
 let config = {
   type: Phaser.AUTO,
-  width: window.innerWidth,
-  height: window.innerHeight,
+  width: 1100,
+  height: 900,
   physics: {
     default: 'arcade',
     arcade: {
@@ -15,7 +15,7 @@ let config = {
     update: update
   },
   scale: {
-    mode: Phaser.Scale.RESIZE,
+    mode: Phaser.Scale.FIT, // or Phaser.Scale.NONE if you don't want any resizing
     autoCenter: Phaser.Scale.CENTER_BOTH
   }
 };
@@ -67,7 +67,7 @@ function create() {
     wordWrap: { width: game.config.width - 40 }
   }).setOrigin(0.5, 0.5);
 
-  loreText.setText('In a world of magic and wonder...\n\n...The adventure of survival begins!\n\nDirty Necromancers have taking everthing..... but your head and mana!\n\nYou must overcome obstacles and enemies, collect items, and aim for the highest score!\n\nDont run out of mana!');
+  loreText.setText('In a world of magic and wonder...\n\n...The adventure of survival begins!\n\nDirty Necromancers have taken everything..... except your head and mana!\n\nYou must overcome obstacles and enemies, collect items, and aim for the highest score!\n\nBut most importantly!\n\n Dont run out of mana!');
 
   messageToPlayer = this.add.text(game.config.width / 2, game.config.height / 2 + 300, 'Press space to begin!', {
     font: '32px Arial',
