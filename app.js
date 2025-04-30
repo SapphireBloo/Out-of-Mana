@@ -28,6 +28,8 @@ let blueDotGroup, particles, logo, highScoreText, highScore = localStorage.getIt
 let isDodging = false, dodgeCooldown = false, dodgeDuration = 1000, dodgeCooldownDuration = 3000;
 let loreText;
 let isLoreComplete = false;
+let bgMusicInstance = null;
+
 function preload() {
   this.load.image('background', 'assets/background.png');
   this.load.image('road', 'assets/road.png');
@@ -103,9 +105,11 @@ function create() {
   staminaBar = this.add.rectangle(bird.x, bird.y + 40, 76, 6, 0x3399ff).setOrigin(0.5);
   this.uiLayer.add([this.staminaBg, staminaBar]);
 
-  this.bgMusic = this.sound.add('bgMusic', { loop: true, volume: 0.5 });
-  this.bgMusic.play();
-
+  if (!bgMusicInstance) {
+    bgMusicInstance = this.sound.add('bgMusic', { loop: true, volume: 0.5 });
+    bgMusicInstance.play();
+  }
+  
   this.columnsGroup = this.physics.add.group();
   blueDotGroup = this.physics.add.group();
   this.enemyGroup = this.physics.add.group();
@@ -404,7 +408,7 @@ function endGame(scene) {
   bird.body.allowGravity = false;
   bird.anims.pause?.();
   scene.physics.pause();
-  scene.bgMusic?.stop();
+  
 
   if (score > highScore) {
     highScore = score;
