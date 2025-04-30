@@ -6,7 +6,7 @@ let config = {
     default: 'arcade',
     arcade: {
       gravity: { y: 600 },
-      debug: false
+      debug: true
     }
   },
   scene: {
@@ -23,13 +23,11 @@ let config = {
 let game = new Phaser.Game(config);
 
 let bird, cursors, hasLanded = false, hasBumped = false, isGameStarted = false, isWaitingForClick = false, messageToPlayer, score = 0, scoreText;
-let columnHeight = 320, columnSpeed = -100, stamina = 150, maxStamina = 150, staminaBar, staminaDrainPerFlap = 4;
+let columnHeight = 320, columnSpeed = -100, stamina = 250, maxStamina = 250, staminaBar, staminaDrainPerFlap = 4;
 let blueDotGroup, particles, logo, highScoreText, highScore = localStorage.getItem('highScore') ? parseInt(localStorage.getItem('highScore')) : 0;
 let isDodging = false, dodgeCooldown = false, dodgeDuration = 1000, dodgeCooldownDuration = 3000;
 let loreText;
 let isLoreComplete = false;
-let bgMusicInstance = null;
-
 function preload() {
   this.load.image('background', 'assets/background.png');
   this.load.image('road', 'assets/road.png');
@@ -105,11 +103,9 @@ function create() {
   staminaBar = this.add.rectangle(bird.x, bird.y + 40, 76, 6, 0x3399ff).setOrigin(0.5);
   this.uiLayer.add([this.staminaBg, staminaBar]);
 
-  if (!bgMusicInstance) {
-    bgMusicInstance = this.sound.add('bgMusic', { loop: true, volume: 0.5 });
-    bgMusicInstance.play();
-  }
-  
+  this.bgMusic = this.sound.add('bgMusic', { loop: true, volume: 0.5 });
+  this.bgMusic.play();
+
   this.columnsGroup = this.physics.add.group();
   blueDotGroup = this.physics.add.group();
   this.enemyGroup = this.physics.add.group();
@@ -124,7 +120,7 @@ function create() {
  
 
   this.physics.add.overlap(bird, blueDotGroup, (bird, dot) => {
-    stamina = Math.min(maxStamina, stamina + 60);
+    stamina = Math.min(maxStamina, stamina + 90);
     showPickupEffect.call(this, dot.x, dot.y);
     dot.destroy();
     this.sound.play('pickupSound', { volume: 0.6 });
@@ -382,12 +378,21 @@ function spawnColumns() {
 }
 
 function scheduleNextColumn() {
-  const delay = Phaser.Math.Between(2000, 3500);
+  const baseMin = 5000;
+  const baseMax = 7000;
+  const difficultyFactor = Math.min(score, 50); // cap influence at score 50
+
+  const minDelay = baseMin - difficultyFactor * 20;
+  const maxDelay = baseMax - difficultyFactor * 30;
+
+  const delay = Phaser.Math.Between(Math.max(1500, minDelay), Math.max(2500, maxDelay));
+
   this.time.delayedCall(delay, () => {
     spawnColumns.call(this);
     scheduleNextColumn.call(this);
   });
 }
+
 
 function showPickupEffect(x, y) {
   const emitter = particles.createEmitter({
@@ -408,7 +413,7 @@ function endGame(scene) {
   bird.body.allowGravity = false;
   bird.anims.pause?.();
   scene.physics.pause();
-  
+  scene.bgMusic?.stop();
 
   if (score > highScore) {
     highScore = score;
@@ -456,3 +461,4 @@ function restartGame(scene) {
   hasBumped = false;
  
 }
+ 
