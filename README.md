@@ -1,4 +1,6 @@
 Out of Mana
+
+
 Welcome to Out of Mana! This is my first video game project, and I'm excited to share it with you. While it's still a work in progress, I'm proud of how far it's come and eager to continue developing it.
 
 🎮 About the Game
