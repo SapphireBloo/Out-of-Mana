@@ -3,6 +3,7 @@ Out of Mana
 
 Welcome to Out of Mana! This is my first video game project, and I'm excited to share it with you. While it's still a work in progress, I'm proud of how far it's come and eager to continue developing it.
 
+<p align="center"> <a href="https://sapphirebloo.github.io/Out-of-Mana/" target="_blank"> <img src="https://img.shields.io/badge/Play%20Now-Live%20Demo-brightgreen?style=for-the-badge" alt="Live Demo"> </a> </p>
 🎮 About the Game
 Out of Mana is a game developed using HTML and JavaScript. The project currently includes:
 
